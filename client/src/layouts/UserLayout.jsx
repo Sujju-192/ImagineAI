@@ -10,7 +10,7 @@ const UserLayout = () => {
       <UserNavbar />
 
       {/* Main Content Area */}
-      <div className="flex-1 overflow-y-auto p-6 bg-gray-100 p-16">
+      <div className="flex-1 overflow-y-auto p-6 bg-gray-100">
         <Outlet />
       </div>
     </div>
