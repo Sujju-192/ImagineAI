@@ -4,6 +4,7 @@ import { Link, useParams } from 'react-router';
 import { useSelector } from 'react-redux';
 import { addFolder, getFolderContents, uploadImage } from "../API/user.api";
 import { motion, AnimatePresence } from "framer-motion";
+import ImageCard from "./ImageCard";
 
 const Home = () => {
   const [showOptions, setShowOptions] = useState(false);
@@ -103,20 +104,28 @@ const Home = () => {
       )}
 
       {/* Images Section */}
+
       {images.length > 0 && (
         <div>
           <h2 className="text-xl font-semibold text-purple-800 mb-4">Images</h2>
           <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-4">
+
             {images.map((image, index) => (
-              <motion.div
-                key={index}
-                whileHover={{ scale: 1.05 }}
-                whileTap={{ scale: 0.95 }}
-                className="relative aspect-square rounded-lg overflow-hidden shadow-md hover:shadow-lg transition-shadow"
-              >
-                <img src={image} alt={`Uploaded ${index + 1}`} className="w-full h-full object-cover" />
-              </motion.div>
+              
+              <ImageCard imageUrl={image}/>
+              // <motion.div
+              //   key={index}
+              //   whileHover={{ scale: 1.05 }}
+              //   whileTap={{ scale: 0.95 }}
+              //   className="relative aspect-square rounded-lg overflow-hidden shadow-md hover:shadow-lg transition-shadow"
+              // >
+              //   <img src={image} alt={`Uploaded ${index + 1}`} className="w-full h-full object-cover" />
+              // </motion.div>
+
+
             ))}
+
+
           </div>
         </div>
       )}
