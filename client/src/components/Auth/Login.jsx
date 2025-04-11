@@ -8,16 +8,16 @@ const Login = () => {
   const [password, setPassword] = useState("");
 
 
-  const firebase=useFirebase()
+  const firebase = useFirebase()
 
-  const handleSubmit = async(e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    const res=await firebase.signin(email,password)
+    const res = await firebase.signin(email, password)
   };
 
-  const handleGoogleAuth=async(e)=>{
+  const handleGoogleAuth = async (e) => {
     e.preventDefault()
-    const res=await firebase.signinByGoogle()
+    const res = await firebase.signinByGoogle()
   }
 
   return (
@@ -62,7 +62,7 @@ const Login = () => {
           type="submit"
           onClick={handleSubmit}
           className="w-full bg-purple-900 text-white py-2 px-4 rounded-md hover:bg-purple-800 focus:outline-none focus:ring-2 focus:ring-purple-500 focus:ring-offset-2"
-          >
+        >
           Log In
         </button>
 

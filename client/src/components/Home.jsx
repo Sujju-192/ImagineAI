@@ -1,17 +1,24 @@
 import React, { useEffect, useState } from "react";
-import { FaFolder, FaImage, FaPlus } from "react-icons/fa";
-import { Link, useParams } from 'react-router';
+import { FaFolder, FaImage, FaPlus, FaUpload, FaTimes, FaSpinner } from "react-icons/fa";
+import { FiFolderPlus, FiImage } from "react-icons/fi";
+import { Link, useLocation, useNavigation, useParams } from 'react-router';
 import { useSelector } from 'react-redux';
 import { addFolder, getFolderContents, uploadImage } from "../API/user.api";
 import { motion, AnimatePresence } from "framer-motion";
 import ImageCard from "./ImageCard";
+import Folder from "./Folder";
 
 const Home = () => {
   const [showOptions, setShowOptions] = useState(false);
   const [showFolderPrompt, setShowFolderPrompt] = useState(false);
   const [folderName, setFolderName] = useState("");
+  
+  
+  
+  
+  
 
-  //--------------> State for Images & Folders
+  // State for Images & Folders
   const [images, setimages] = useState([]);
   const [folders, setfolders] = useState([]);
   const { parent } = useParams();
@@ -19,36 +26,37 @@ const Home = () => {
   const [selectedImage, setSelectedImage] = useState(null);
   const [isUploading, setIsUploading] = useState(false);
   const [showImageUploadPopup, setShowImageUploadPopup] = useState(false);
-  const [parentName,setParentName]=useState("")
+  const [parentName, setParentName] = useState("");
 
-  //--------------> Fetch Folder Contents
+  // Fetch Folder Contents
   useEffect(() => {
     const fetch = async () => {
       const response = await getFolderContents(userId, parent);
       if (response) {
         setfolders(response.subFolders);
         setimages(response.images);
-        setParentName(response.name)
+        setParentName(response.name);
       }
     };
     fetch();
   }, [parent]);
 
-  //--------------> Handle Adding Folder
+  // Handle Adding Folder
   const handleAddFolder = async () => {
     const response = await addFolder(userId, parent, folderName);
     if (response) {
       setfolders(pre => [...pre, response]);
       setShowFolderPrompt(false);
+      setFolderName("");
     }
   };
 
-  //--------------> Handle Image Selection
+  // Handle Image Selection
   const handleImageChange = (event) => {
     setSelectedImage(event.target.files[0]);
   };
 
-  //--------------> Handle Image Upload
+  // Handle Image Upload
   const handleUploadImage = async () => {
     if (!selectedImage) {
       alert("Please select an image first.");
@@ -68,7 +76,6 @@ const Home = () => {
         setimages((prev) => [...prev, response]);
         setSelectedImage(null);
         setShowImageUploadPopup(false);
-        alert("Image uploaded successfully!");
       }
     } catch (error) {
       console.error("Error uploading image:", error);
@@ -79,99 +86,102 @@ const Home = () => {
   };
 
   return (
-    <div className="p-6 relative">
-      <h1 className="text-2xl font-bold text-purple-900 mb-6">{`AT : ${parentName.toUpperCase()}`}</h1>
+    <div className="p-6 relative bg-gray-50 min-h-screen text-gray-800">
+      {/* Header Section */}
+      <div className="flex justify-between items-center mb-8">
+        <h1 className="text-2xl font-bold text-gray-800">
+          <span className="text-purple-600">Gallery:</span> {parentName}
+        </h1>
+      </div>
 
       {/* Folders Section */}
-      {folders.length > 0 && (
-        <div className="mb-8">
-          <h2 className="text-xl font-semibold text-purple-800 mb-4">Folders</h2>
-          <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-4">
+      <section className="mb-12">
+        <div className="flex justify-between items-center mb-6">
+          <h2 className="text-xl font-semibold text-gray-700">Folders</h2>
+          <button
+            onClick={() => {
+              setShowFolderPrompt(true);
+              setShowOptions(false);
+            }}
+            className="flex items-center space-x-2 text-sm bg-purple-600 hover:bg-purple-700 text-white px-4 py-2 rounded-lg transition-colors"
+          >
+            <FiFolderPlus className="text-base" />
+            <span>New Folder</span>
+          </button>
+        </div>
+
+        {folders.length > 0 ? (
+          <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-4">
             {folders.map((folder) => (
               <Link key={folder.id} to={`/user/home/${folder.id}`}>
-                <motion.div
-                  whileHover={{ scale: 1.05 }}
-                  whileTap={{ scale: 0.95 }}
-                  className="flex flex-col items-center p-4 bg-white rounded-lg shadow-md hover:shadow-lg transition-shadow cursor-pointer"
+                {/* <motion.div
+                  whileHover={{ y: -5 }}
+                  whileTap={{ scale: 0.98 }}
+                  className="flex flex-col items-center p-4 bg-white rounded-xl shadow-sm hover:shadow-md border border-gray-200 hover:border-purple-300 transition-all cursor-pointer h-full"
                 >
-                  <FaFolder className="text-4xl text-purple-900" />
-                  <p className="mt-2 text-sm text-purple-900 text-center">{folder.name}</p>
-                </motion.div>
+                  <div className="relative w-16 h-16 flex items-center justify-center mb-3">
+                    <FaFolder className="text-4xl text-purple-500 absolute" />
+                    <FaFolder className="text-4xl text-purple-400 absolute opacity-70 -bottom-1 -right-1" />
+                  </div>
+                </motion.div> */}
+                <div className="">
+                  <Folder name={folder.name} />
+                </div>
+                {/* <p className="text-sm font-medium text-gray-700 text-center truncate w-full">
+                  {folder.name}
+                </p> */}
               </Link>
             ))}
           </div>
-        </div>
-      )}
+        ) : (
+          <div className="bg-white rounded-xl p-8 text-center border-2 border-dashed border-gray-300">
+            <FiFolderPlus className="mx-auto text-4xl text-gray-400 mb-3" />
+            <p className="text-gray-500">No folders yet</p>
+            <button
+              onClick={() => setShowFolderPrompt(true)}
+              className="mt-4 text-sm bg-purple-600 hover:bg-purple-700 text-white px-4 py-2 rounded-lg transition-colors"
+            >
+              Create your first folder
+            </button>
+          </div>
+        )}
+      </section>
 
       {/* Images Section */}
-
-      {images.length > 0 && (
-        <div>
-          <h2 className="text-xl font-semibold text-purple-800 mb-4">Images</h2>
-          <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-4">
-
-            {images.map((image, index) => (
-              
-              <ImageCard imageUrl={image}/>
-              // <motion.div
-              //   key={index}
-              //   whileHover={{ scale: 1.05 }}
-              //   whileTap={{ scale: 0.95 }}
-              //   className="relative aspect-square rounded-lg overflow-hidden shadow-md hover:shadow-lg transition-shadow"
-              // >
-              //   <img src={image} alt={`Uploaded ${index + 1}`} className="w-full h-full object-cover" />
-              // </motion.div>
-
-
-            ))}
-
-
-          </div>
-        </div>
-      )}
-
-      {/* Floating Add Button */}
-      <motion.button
-        onClick={() => setShowOptions(!showOptions)}
-        whileHover={{ scale: 1.1 }}
-        whileTap={{ scale: 0.9 }}
-        className="fixed bottom-6 right-6 bg-purple-900 text-white p-4 rounded-full shadow-lg hover:bg-purple-700 transition"
-      >
-        <FaPlus className="text-xl" />
-      </motion.button>
-
-      {/* Pop-up Options */}
-      <AnimatePresence>
-        {showOptions && (
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, y: 20 }}
-            className="fixed bottom-20 right-6 bg-white shadow-lg rounded-lg p-2 flex flex-col space-y-2"
+      <section>
+        <div className="flex justify-between items-center mb-6">
+          <h2 className="text-xl font-semibold text-gray-700">Images</h2>
+          <button
+            onClick={() => {
+              setShowImageUploadPopup(true);
+              setShowOptions(false);
+            }}
+            className="flex items-center space-x-2 text-sm bg-purple-600 hover:bg-purple-700 text-white px-4 py-2 rounded-lg transition-colors"
           >
+            <FiImage className="text-base" />
+            <span>Upload Image</span>
+          </button>
+        </div>
+
+        {images.length > 0 ? (
+          <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-4">
+            {images.map((image, index) => (
+              <ImageCard imageUrl={image} key={index} />
+            ))}
+          </div>
+        ) : (
+          <div className="bg-white rounded-xl p-8 text-center border-2 border-dashed border-gray-300">
+            <FiImage className="mx-auto text-4xl text-gray-400 mb-3" />
+            <p className="text-gray-500">No images yet</p>
             <button
-              onClick={() => {
-                setShowFolderPrompt(true);
-                setShowOptions(false);
-              }}
-              className="flex items-center space-x-2 px-4 py-2 text-purple-900 hover:bg-purple-100 rounded"
+              onClick={() => setShowImageUploadPopup(true)}
+              className="mt-4 text-sm bg-purple-600 hover:bg-purple-700 text-white px-4 py-2 rounded-lg transition-colors"
             >
-              <FaFolder />
-              <span>Add Folder</span>
+              Upload your first image
             </button>
-            <button
-              onClick={() => {
-                setShowImageUploadPopup(true);
-                setShowOptions(false);
-              }}
-              className="flex items-center space-x-2 px-4 py-2 text-purple-900 hover:bg-purple-100 rounded"
-            >
-              <FaImage />
-              <span>Add Image</span>
-            </button>
-          </motion.div>
+          </div>
         )}
-      </AnimatePresence>
+      </section>
 
       {/* Image Upload Popup */}
       <AnimatePresence>
@@ -180,35 +190,82 @@ const Home = () => {
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
-            className="fixed inset-0 flex justify-center items-center bg-black/60"
+            className="fixed inset-0 flex justify-center items-center bg-black/50 backdrop-blur-sm z-50 p-4"
           >
             <motion.div
-              initial={{ scale: 0.8 }}
-              animate={{ scale: 1 }}
-              exit={{ scale: 0.8 }}
-              className="bg-white p-6 rounded-lg shadow-lg w-96"
+              initial={{ scale: 0.95, y: 20 }}
+              animate={{ scale: 1, y: 0 }}
+              exit={{ scale: 0.95, y: 20 }}
+              className="bg-white rounded-xl shadow-xl w-full max-w-md overflow-hidden"
             >
-              <h2 className="text-xl font-semibold text-purple-900 mb-4">Upload Image</h2>
+              <div className="p-6">
+                <div className="flex justify-between items-center mb-4">
+                  <h3 className="text-lg font-semibold text-gray-800">Upload Image</h3>
+                  <button
+                    onClick={() => setShowImageUploadPopup(false)}
+                    className="text-gray-500 hover:text-gray-700"
+                  >
+                    <FaTimes />
+                  </button>
+                </div>
 
-              {/* Image Input */}
-              <label className="block mb-4">
-                <span className="text-sm text-gray-700">Select an image</span>
-                <input
-                  type="file"
-                  accept="image/*"
-                  onChange={handleImageChange}
-                  className="block w-full mt-1 text-sm text-gray-700 file:mr-4 file:py-2 file:px-4 file:rounded file:border-0 file:text-sm file:font-semibold file:bg-purple-50 file:text-purple-700 hover:file:bg-purple-100"
-                />
-              </label>
+                <label className="block mb-6">
+                  <div className="border-2 border-dashed border-gray-300 rounded-xl p-8 text-center hover:border-purple-400 transition-colors cursor-pointer">
+                    <input
+                      type="file"
+                      accept="image/*"
+                      onChange={handleImageChange}
+                      className="hidden"
+                      id="file-upload"
+                    />
+                    {selectedImage ? (
+                      <div className="space-y-2">
+                        <FaImage className="mx-auto text-3xl text-purple-500" />
+                        <p className="text-sm font-medium text-gray-700 truncate">
+                          {selectedImage.name}
+                        </p>
+                        <p className="text-xs text-gray-500">
+                          {(selectedImage.size / 1024).toFixed(2)} KB
+                        </p>
+                      </div>
+                    ) : (
+                      <div className="space-y-3">
+                        <FaUpload className="mx-auto text-3xl text-gray-400" />
+                        <p className="text-sm text-gray-600">
+                          Drag & drop your image here, or click to browse
+                        </p>
+                        <p className="text-xs text-gray-500">
+                          Supports: JPG, PNG, GIF up to 10MB
+                        </p>
+                      </div>
+                    )}
+                  </div>
+                </label>
 
-              {/* Upload Button */}
-              <button
-                onClick={handleUploadImage}
-                disabled={!selectedImage || isUploading}
-                className="w-full bg-purple-900 text-white py-2 px-4 rounded hover:bg-purple-700 disabled:bg-purple-400"
-              >
-                {isUploading ? "Uploading..." : "Upload"}
-              </button>
+                <div className="flex justify-end space-x-3">
+                  <button
+                    onClick={() => setShowImageUploadPopup(false)}
+                    className="px-4 py-2 text-sm text-gray-700 hover:text-gray-900 transition-colors"
+                  >
+                    Cancel
+                  </button>
+                  <button
+                    onClick={handleUploadImage}
+                    disabled={!selectedImage || isUploading}
+                    className={`px-4 py-2 text-sm text-white bg-purple-600 hover:bg-purple-700 rounded-lg transition-colors flex items-center ${(!selectedImage || isUploading) ? 'opacity-70 cursor-not-allowed' : ''
+                      }`}
+                  >
+                    {isUploading ? (
+                      <>
+                        <FaSpinner className="animate-spin mr-2" />
+                        Uploading...
+                      </>
+                    ) : (
+                      'Upload Image'
+                    )}
+                  </button>
+                </div>
+              </div>
             </motion.div>
           </motion.div>
         )}
@@ -221,29 +278,53 @@ const Home = () => {
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
-            className="fixed inset-0 flex justify-center items-center bg-black/60"
+            className="fixed inset-0 flex justify-center items-center bg-black/50 backdrop-blur-sm z-50 p-4"
           >
             <motion.div
-              initial={{ scale: 0.8 }}
-              animate={{ scale: 1 }}
-              exit={{ scale: 0.8 }}
-              className="bg-white p-6 rounded-lg shadow-lg w-80 text-center"
+              initial={{ scale: 0.95, y: 20 }}
+              animate={{ scale: 1, y: 0 }}
+              exit={{ scale: 0.95, y: 20 }}
+              className="bg-white rounded-xl shadow-xl w-full max-w-md overflow-hidden"
             >
-              <h2 className="text-lg font-semibold mb-4">Enter Folder Name</h2>
-              <input
-                type="text"
-                value={folderName}
-                onChange={(e) => setFolderName(e.target.value)}
-                className="w-full border rounded px-3 py-2 mb-4"
-                placeholder="Folder Name"
-              />
-              <div className="flex justify-between">
-                <button onClick={handleAddFolder} className="bg-purple-900 text-white px-4 py-2 rounded hover:bg-purple-700">
-                  Add
-                </button>
-                <button onClick={() => setShowFolderPrompt(false)} className="bg-gray-300 text-gray-700 px-4 py-2 rounded hover:bg-gray-400">
-                  Cancel
-                </button>
+              <div className="p-6">
+                <div className="flex justify-between items-center mb-4">
+                  <h3 className="text-lg font-semibold text-gray-800">Create New Folder</h3>
+                  <button
+                    onClick={() => setShowFolderPrompt(false)}
+                    className="text-gray-500 hover:text-gray-700"
+                  >
+                    <FaTimes />
+                  </button>
+                </div>
+
+                <div className="mb-6">
+                  <label className="block text-sm font-medium text-gray-700 mb-2">
+                    Folder Name
+                  </label>
+                  <input
+                    type="text"
+                    value={folderName}
+                    onChange={(e) => setFolderName(e.target.value)}
+                    className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent"
+                    placeholder="Enter folder name"
+                    autoFocus
+                  />
+                </div>
+
+                <div className="flex justify-end space-x-3">
+                  <button
+                    onClick={() => setShowFolderPrompt(false)}
+                    className="px-4 py-2 text-sm text-gray-700 hover:text-gray-900 transition-colors"
+                  >
+                    Cancel
+                  </button>
+                  <button
+                    onClick={handleAddFolder}
+                    className="px-4 py-2 text-sm text-white bg-purple-600 hover:bg-purple-700 rounded-lg transition-colors"
+                  >
+                    Create Folder
+                  </button>
+                </div>
               </div>
             </motion.div>
           </motion.div>

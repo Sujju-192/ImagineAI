@@ -22,6 +22,7 @@ export const getUserDetailsFromDb=async(userId)=>{
         const{name ,profilePic,rootFolderId}=res.data
         return {name:name,profilePic:profilePic,rootFolderId:rootFolderId}
     } catch (error) {
+        console.log(error);
         return false
     }
 }

@@ -21,23 +21,25 @@ function App() {
   useEffect(() => {
     onAuthStateChanged(auth, async (user) => {
       if (user) {
+        console.log(user);
+        
         setTimeout(async () => {
           const res = await getUserDetailsFromDb(user.uid);
           console.log(res);
           if (res) {
             setIsAuth(true);
             dispatch(updateUser({ userId: user.uid, name: res.name, profilePic: res.profilePic, rootFolderId: res.rootFolderId }));
-            if ( res.rootFolderId) {
+            if (res.rootFolderId) {
               navigate(`/user/home/${res.rootFolderId}`);
             }
           }
-        }, 900); 
+        }, 900);
       } else {
         setIsAuth(false);
       }
     });
   }, []);
-  
+
 
 
   if (isauth) {
