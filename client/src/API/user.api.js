@@ -7,6 +7,8 @@ const userApi = axios.create({
 
 
 export const createUserAtServer=async(userData)=>{
+    console.log(userData);
+    
     try {
         const response=await userApi.post("/adduser",userData)
         return response.status

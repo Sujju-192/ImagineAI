@@ -7,7 +7,7 @@ import { signOut } from "firebase/auth";
 import { useNavigate } from "react-router";
 import { auth } from "../Firebase";
 import { Link } from "react-router";
-import {useLocation}from "react-router"
+import { useLocation } from "react-router"
 
 const UserNavbar = () => {
   const [isProfileOpen, setIsProfileOpen] = useState(false);
@@ -16,7 +16,7 @@ const UserNavbar = () => {
   const name = useSelector((state) => state.name);
   const navigate = useNavigate();
   const root = useSelector(state => state.rootFolderId);
-  const {pathname}=useLocation();
+  const { pathname } = useLocation();
 
   const toggleProfileDropdown = () => {
     setIsProfileOpen(!isProfileOpen);
@@ -121,7 +121,7 @@ const UserNavbar = () => {
                 initial={{ opacity: 0, y: -10 }}
                 animate={{ opacity: 1, y: 0 }}
                 exit={{ opacity: 0, y: -10 }}
-                className="absolute right-0 mt-2 w-56 bg-white rounded-xl shadow-lg py-2 border border-gray-200 z-50"
+                className="absolute right-0 mt-2 w-56 bg-white rounded-xl shadow-lg py-2 border border-gray-200 z-99999999"
               >
                 <motion.a
                   whileHover={{ x: 5 }}

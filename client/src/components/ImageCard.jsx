@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { X, Edit2, Maximize2, Minimize2 } from "lucide-react";
+import { X, Edit2, Maximize2, Trash2 } from "lucide-react";
 import ImageEditor from "./ImageEditor";
 
 const ImageCard = ({ imageUrl }) => {
@@ -19,54 +19,36 @@ const ImageCard = ({ imageUrl }) => {
   const toggleEdit = () => setEdit((prev) => !prev);
   const closeEditor = () => setEdit(false);
 
+  const handleDelete = () => {
+    // 💣 Add your delete logic here
+    console.log("Delete image:", imageUrl);
+  };
+
   return (
     <>
       {/* Main Image Card */}
       <div className="relative w-full max-w-sm group">
         <div
-          className={`relative overflow-hidden rounded-2xl bg-gradient-to-br from-gray-100 to-gray-200 shadow-lg transition-all duration-300 ${
+          onClick={toggleFullScreen}
+          className={`relative overflow-hidden rounded-2xl bg-gradient-to-br from-gray-100 to-gray-200 shadow-lg transition-all duration-300 cursor-zoom-in${
             !isFullScreen && !disableHover && "group-hover:shadow-xl"
           }`}
         >
-          {/* Image with click-to-zoom */}
-          <motion.div
-            onClick={toggleFullScreen}
-            className="cursor-zoom-in"
+          <motion.img
+            src={imageUrl}
+            alt="Display"
+            className="w-full h-60 object-cover transition-opacity duration-300 group-hover:opacity-90"
             whileHover={!isFullScreen && !disableHover ? { scale: 1.02 } : {}}
             transition={{ duration: 0.3 }}
-          >
-            <img
-              src={imageUrl}
-              alt="Display"
-              className="w-full h-60 object-cover transition-opacity duration-300 group-hover:opacity-90"
-            />
-          </motion.div>
+          />
 
-          {/* Floating Edit Button (always visible) */}
-          <button
-            onClick={(e) => {
-              e.stopPropagation();
-              toggleEdit();
-            }}
-            className="absolute top-3 right-3 p-2 bg-white/90 backdrop-blur-sm rounded-full shadow-md hover:bg-white transition-all"
-            aria-label="Edit image"
-          >
-            <Edit2 size={18} className="text-gray-800" />
-          </button>
-
-          {/* Hover Overlay Actions */}
+          {/* Hover Overlay Expand Button */}
           {!isFullScreen && (
-            <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-end justify-center pb-4">
-              <button
-                onClick={(e) => {
-                  e.stopPropagation();
-                  toggleFullScreen();
-                }}
-                className="flex items-center gap-2 bg-white/90 text-gray-800 px-4 py-2 rounded-full shadow-md hover:bg-white transition-all"
-              >
+            <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-end justify-center pb-4 pointer-events-none">
+              <div className="flex items-center gap-2 bg-white/90 text-gray-800 px-4 py-2 rounded-full shadow-md text-sm font-medium">
                 <Maximize2 size={16} />
-                <span className="text-sm font-medium">Expand</span>
-              </button>
+                Expand
+              </div>
             </div>
           )}
         </div>
@@ -83,9 +65,7 @@ const ImageCard = ({ imageUrl }) => {
             onClick={toggleFullScreen}
           >
             {/* Top Control Bar */}
-            <div className="absolute top-0 left-0 right-0 flex justify-between items-center p-4 z-10">
-              <div className="flex-1"></div> {/* Spacer */}
-              
+            <div className="absolute top-0 left-0 right-0 flex justify-end items-center gap-3 p-4 z-10">
               {/* Edit Button */}
               <button
                 onClick={(e) => {
@@ -97,14 +77,26 @@ const ImageCard = ({ imageUrl }) => {
               >
                 <Edit2 size={20} className="text-white" />
               </button>
-              
+
+              {/* Delete Button */}
+              <button
+                onClick={(e) => {
+                  e.stopPropagation();
+                  handleDelete();
+                }}
+                className="p-2 bg-red-500/20 backdrop-blur-lg rounded-full hover:bg-red-500/40 transition-colors"
+                aria-label="Delete image"
+              >
+                <Trash2 size={20} className="text-red-400" />
+              </button>
+
               {/* Close Button */}
               <button
                 onClick={(e) => {
                   e.stopPropagation();
                   toggleFullScreen();
                 }}
-                className="ml-4 p-2 bg-white/10 backdrop-blur-lg rounded-full hover:bg-white/20 transition-colors"
+                className="p-2 bg-white/10 backdrop-blur-lg rounded-full hover:bg-white/20 transition-colors"
                 aria-label="Close"
               >
                 <X size={20} className="text-white" />

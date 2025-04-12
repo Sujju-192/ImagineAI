@@ -4,7 +4,6 @@ import axios from "axios";
 import { motion, AnimatePresence } from "framer-motion";
 import Load from "./Loader/Load";
 
-
 const FILTERS = [
     { name: "Grayscale", value: "e_grayscale" },
     { name: "Sepia", value: "e_sepia" },
@@ -21,11 +20,7 @@ const AI_FEATURES = [
 
 const AI_PRO_FEATURES = [
     { name: "BackGround Replace", value: "e_gen_background_replace" },
-]
-
-
-
-
+];
 
 const ImageEditor = ({ imageUrl, onClose }) => {
     const [selectedFilter, setSelectedFilter] = useState("");
@@ -33,14 +28,13 @@ const ImageEditor = ({ imageUrl, onClose }) => {
     const [editedUrl, setEditedUrl] = useState(imageUrl);
     const [mode, setMode] = useState("normal");
     const [showControls, setShowControls] = useState(true);
-    const [prompt, setprompt] = useState("")
-    const [aipro, setaipro] = useState("")
-
+    const [prompt, setprompt] = useState("");
+    const [aipro, setaipro] = useState("");
 
     useEffect(() => {
         setEditedUrl(imageUrl);
-        setaipro("")
-        setprompt("")
+        setaipro("");
+        setprompt("");
     }, [mode]);
 
     const applyFilter = async (filter) => {
@@ -105,17 +99,12 @@ const ImageEditor = ({ imageUrl, onClose }) => {
         }
     };
 
-
     const applyBackgroundReplace = async () => {
-        if (prompt.length == 0 || aipro != "BackGround Replace") return;
+        if (prompt.length == 0 || aipro !== "BackGround Replace") return;
         setLoading(true);
         const [base, params] = imageUrl.split("/upload/");
-        let finalPrompt = prompt.trim().replaceAll(/\s+/g, ' ')
-        finalPrompt = finalPrompt.replaceAll(' ', "%20")
+        let finalPrompt = prompt.trim().replaceAll(/\s+/g, ' ').replaceAll(' ', "%20");
         const aiImageUrl = `${base}/upload/${AI_PRO_FEATURES[0].value}:prompt_${finalPrompt}/${params}`;
-        console.log(aiImageUrl);
-
-        // https://res.cloudinary.com/dnbm8mudh/image/upload/e_gen_background_replace:prompt_Futuristic%20sci-fi%20cityscape%20with%20neon%20lights%20at%20night/v1744398369/nzbyc46lctmfs1dfmppq.jpg
 
         let count = 0;
         const maxAttempts = 20;
@@ -141,15 +130,15 @@ const ImageEditor = ({ imageUrl, onClose }) => {
         }, 5000);
     };
 
-    const handleBackgroundReplace = async () => {
+    const handleBackgroundReplace = () => {
         setaipro(AI_PRO_FEATURES[0].name);
-        setEditedUrl(imageUrl)
-    }
+        setEditedUrl(imageUrl);
+    };
 
     return (
         <AnimatePresence>
             <motion.div
-                className="fixed inset-0 bg-gray-900/95 z-[9999] flex flex-col lg:flex-row"
+                className="fixed inset-0 bg-gray-900/95 z-[9999] flex flex-col lg:flex-row overflow-y-auto hide-scrollbar"
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
                 exit={{ opacity: 0 }}
@@ -180,7 +169,6 @@ const ImageEditor = ({ imageUrl, onClose }) => {
                         exit={{ x: '-100%' }}
                         transition={{ type: 'spring', stiffness: 300, damping: 30 }}
                     >
-                        {/* Desktop Header */}
                         <div className="hidden lg:flex justify-between items-center mb-6">
                             <h2 className="text-xl font-bold text-white">Image Editor</h2>
                             <button
@@ -191,7 +179,6 @@ const ImageEditor = ({ imageUrl, onClose }) => {
                             </button>
                         </div>
 
-                        {/* Mode Toggle */}
                         <div className="flex gap-2 mb-6 bg-gray-700 p-1 rounded-lg">
                             <button
                                 onClick={() => setMode("normal")}
@@ -209,110 +196,80 @@ const ImageEditor = ({ imageUrl, onClose }) => {
                             </button>
                         </div>
 
-                        {/* Filters/AI Features */}
                         <div className="flex-1 overflow-y-auto">
                             <h3 className="text-sm font-semibold text-gray-400 mb-3 uppercase tracking-wider">
                                 {mode === "normal" ? "FILTERS" : "AI FEATURES"}
                             </h3>
-                            <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-2 gap-3">
+                            <div className="grid grid-cols-2 gap-3">
                                 {(mode === "normal" ? FILTERS : AI_FEATURES).map((item) => (
                                     <button
                                         key={item.value}
                                         onClick={() => {
                                             mode === "normal" ? applyFilter(item.value) : applyAIFeature(item.value);
-                                            setaipro("")
-                                            setprompt("")
+                                            setaipro("");
+                                            setprompt("");
                                         }}
                                         className={`p-3 rounded-lg text-sm font-medium flex items-center justify-center transition-all ${selectedFilter === item.value ? "bg-blue-600 text-white" : "bg-gray-700 hover:bg-gray-600 text-gray-200"}`}
                                     >
                                         {item.name}
                                     </button>
                                 ))}
-
                             </div>
                         </div>
 
                         {mode !== "normal" && (
-
                             <div className="flex-1 overflow-y-auto">
                                 <h3 className="text-sm font-semibold text-gray-400 mb-3 uppercase tracking-wider">
                                     AI Pro
                                 </h3>
-                                <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-2 gap-3">
+                                <div className="grid grid-cols-1 gap-3">
                                     <button
                                         onClick={handleBackgroundReplace}
                                         className="p-3 rounded-lg text-sm font-bold flex items-center justify-center transition-all duration-300
-                      bg-gradient-to-r from-purple-600 to-purple-800 text-white
-                      border border-purple-400
-                      shadow-[0_0_10px_2px_rgba(168,85,247,0.6)]
-                      hover:shadow-[0_0_15px_5px_rgba(168,85,247,0.8)]
-                      hover:brightness-110
-                      active:scale-95
-                      relative overflow-hidden
-                      before:absolute before:inset-0 before:bg-[radial-gradient(circle_at_center,_rgba(192,132,252,0.4)_0%,_transparent_70%)] before:opacity-0 hover:before:opacity-100 before:transition-opacity before:duration-300"
+                                            bg-gradient-to-r from-purple-600 to-purple-800 text-white
+                                            border border-purple-400
+                                            shadow-[0_0_10px_2px_rgba(168,85,247,0.6)]
+                                            hover:shadow-[0_0_15px_5px_rgba(168,85,247,0.8)]
+                                            hover:brightness-110
+                                            active:scale-95
+                                            relative overflow-hidden
+                                            before:absolute before:inset-0 before:bg-[radial-gradient(circle_at_center,_rgba(192,132,252,0.4)_0%,_transparent_70%)] before:opacity-0 hover:before:opacity-100 before:transition-opacity before:duration-300"
                                     >
                                         <span className="relative z-10 drop-shadow-[0_0_2px_rgba(255,255,255,0.3)]">
                                             Background Replace
                                         </span>
                                     </button>
-                                    
                                 </div>
                             </div>
                         )}
-
-
-
 
                         {(aipro === "BackGround Replace" && mode !== "normal") && (
-
-                            <div class="relative flex items-stretch max-w-xl">
+                            <div className="relative flex flex-col gap-2 mt-4">
                                 <textarea
-                                    class="
-                                        flex-1 px-4 py-3 rounded-l-md border-r-0
-                                        bg-gray-800 border border-gray-700
-                                        text-gray-200 placeholder-gray-500
-                                        focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-transparent
-                                        transition-all duration-200 resize-none text-sm
-                                        "
-                                    rows="4"
-                                    placeholder="Type your message..."
+                                    className="w-full px-4 py-3 rounded-md bg-gray-800 border border-gray-700 text-gray-200 placeholder-gray-500 text-sm focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-transparent transition-all duration-200 resize-none"
+                                    rows="3"
+                                    placeholder="Describe the background you want to generate..."
                                     onChange={(e) => { setprompt(e.target.value) }}
                                 ></textarea>
-
-                                <div class="relative">
-                                    <button
-                                        class="
-                                            h-full px-3 py-2 rounded-r-md border border-l-0 border-gray-700
-                                            bg-purple-600 hover:bg-purple-700
-                                            text-white flex flex-col items-center justify-center
-                                            focus:outline-none focus:ring-2 focus:ring-purple-500
-                                            transition-all duration-200 text-xs
-                                            "
-                                        type="submit"
-                                        onClick={applyBackgroundReplace}
-                                    >
-
-                                        <svg class="w-4 h-4 mb-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                                d="M13 5l7 7-7 7M5 5l7 7-7 7" />
-                                        </svg>
-
-
-                                    </button>
-                                </div>
+                                <button
+                                    className="w-full px-4 py-2 bg-purple-600 hover:bg-purple-700 text-white rounded-md flex items-center justify-center gap-2 text-sm transition-all duration-200"
+                                    onClick={applyBackgroundReplace}
+                                >
+                                    <span>Generate</span>
+                                    <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2"
+                                            d="M13 5l7 7-7 7M5 5l7 7-7 7" />
+                                    </svg>
+                                </button>
                             </div>
-
                         )}
 
-
-                        {/* Download Button */}
                         <button
                             onClick={downloadImage}
-                            className="mt-4 bg-gradient-to-r from-blue-500 to-purple-600 text-white py-3 rounded-lg font-medium flex items-center justify-center gap-2 hover:opacity-90 transition-opacity"
+                            className="mt-4 bg-gradient-to-r from-blue-500 to-purple-600 text-white py-3 rounded-lg font-medium flex items-center justify-center gap-2 hover:opacity-90 transition-opacity text-sm sm:text-base"
                         >
                             <Download size={18} />
-                            <span className="hidden sm:inline">Download Image</span>
-                            <span className="sm:hidden">Download</span>
+                            <span>Download Image</span>
                         </button>
                     </motion.div>
                 )}
@@ -321,12 +278,10 @@ const ImageEditor = ({ imageUrl, onClose }) => {
                 <div className="flex-1 flex items-center justify-center p-4 lg:p-8 relative">
                     {loading && (
                         <div className="absolute inset-0 flex items-center justify-center bg-gray-900/50 z-10">
-                            {/* //     <Loader2 size={48} className="animate-spin text-blue-500" /> */}
                             <Load />
                         </div>
                     )}
 
-                    {/* Mobile Toggle Controls Button when controls are hidden */}
                     {!showControls && (
                         <button
                             onClick={() => setShowControls(true)}
@@ -336,8 +291,8 @@ const ImageEditor = ({ imageUrl, onClose }) => {
                         </button>
                     )}
 
-                    <div className="w-full h-full max-w-full max-h-[80vh] lg:max-h-[90vh] bg-gray-800 rounded-xl overflow-hidden shadow-2xl border border-gray-700">
-                        <div className="relative w-full h-full flex items-center justify-center">
+                    <div className="w-full h-full max-w-full bg-gray-800 rounded-xl overflow-hidden shadow-2xl border border-gray-700 lg:max-h-[90vh] max-h-[calc(100vh-200px)]">
+                        <div className="relative w-full h-full flex items-center justify-center p-2">
                             <img
                                 src={editedUrl}
                                 alt="Edited Preview"

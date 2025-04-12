@@ -3,7 +3,7 @@ import React from 'react';
 const Folder = ({ name }) => {
   return (
     <section className="relative group flex flex-col items-center justify-center w-full h-full">
-      <div className="file relative w-40 h-28 cursor-pointer origin-bottom [perspective:1500px] z-50">
+      <div className="file relative w-40 h-28 cursor-pointer origin-bottom [perspective:1500px] ">
         <div className="work-5 bg-purple-900 w-full h-full origin-top rounded-2xl rounded-tl-none group-hover:shadow-[0_10px_20px_rgba(0,0,0,.3)] transition-all ease duration-300 relative after:absolute after:content-[''] after:bottom-[99%] after:left-0 after:w-14 after:h-2 after:bg-purple-900 after:rounded-t-2xl before:absolute before:content-[''] before:-top-[10px] before:left-[50px] before:w-3 before:h-3 before:bg-purple-900 before:[clip-path:polygon(0_35%,0%_100%,50%_100%);]" />
         
         <div className="work-4 absolute inset-1 bg-purple-800 rounded-2xl transition-all ease duration-300 origin-bottom select-none group-hover:[transform:rotateX(-20deg)]" />
@@ -14,7 +14,7 @@ const Folder = ({ name }) => {
           <span className="text-sm text-white font-semibold mb-3 px-2 text-center truncate w-full">{name}</span>
         </div>
       </div>
-      <p className="text-sm pt-4 text-purple-300">{name}</p>
+     
     </section>
   );
 }
