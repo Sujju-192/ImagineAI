@@ -2,6 +2,8 @@ import { useEffect, useState } from "react"
 import { Route, Routes } from 'react-router'
 import UserLayout from "./layouts/UserLayout"
 import Home from "./components/Home"
+import TextToImage from "./components/TextToImage"
+import PromptToEdit from "./components/PromptToEdit"
 import Landing from './components/Landing'
 import Signup from './components/Auth/Signup'
 import Login from './components/Auth/Login'
@@ -48,6 +50,8 @@ function App() {
         <Routes>
           <Route path="/user" element={<UserLayout />}>
             <Route path="/user/home/:parent" element={<Home />} />
+            <Route path="/user/text-to-image" element={<TextToImage />} />
+            <Route path="/user/prompt-to-edit" element={<PromptToEdit />} />
           </Route>
         </Routes>
       </>

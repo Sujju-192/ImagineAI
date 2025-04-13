@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { motion } from "framer-motion";
-import { FaHome, FaImage, FaBars, FaTimes, FaCog } from "react-icons/fa";
+import { FaHome, FaImage, FaBars, FaTimes, FaCog, FaEdit } from "react-icons/fa";
 import { FiLogOut } from "react-icons/fi";
 import { useSelector } from "react-redux";
 import { signOut } from "firebase/auth";
@@ -88,15 +88,27 @@ const UserNavbar = () => {
               </motion.div>
             </Link>
 
-            <motion.a
-              whileHover={{ scale: 1.05 }}
-              whileTap={{ scale: 0.95 }}
-              href="#"
-              className="flex items-center space-x-2 text-gray-600 hover:text-purple-600 transition-colors"
-            >
-              <FaImage size={18} />
-              <span className="font-medium">Text to Image</span>
-            </motion.a>
+            <Link to="/user/text-to-image">
+              <motion.div
+                whileHover={{ scale: 1.05 }}
+                whileTap={{ scale: 0.95 }}
+                className="flex items-center space-x-2 text-gray-600 hover:text-purple-600 transition-colors"
+              >
+                <FaImage size={18} />
+                <span className="font-medium">Text to Image</span>
+              </motion.div>
+            </Link>
+
+            <Link to="/user/prompt-to-edit">
+              <motion.div
+                whileHover={{ scale: 1.05 }}
+                whileTap={{ scale: 0.95 }}
+                className="flex items-center space-x-2 text-gray-600 hover:text-purple-600 transition-colors"
+              >
+                <FaEdit size={18} />
+                <span className="font-medium">Prompt to Edit</span>
+              </motion.div>
+            </Link>
           </div>
 
           {/* Profile Dropdown (Desktop) */}
@@ -171,14 +183,24 @@ const UserNavbar = () => {
                 <span>Home</span>
               </motion.div>
             </Link>
-            <motion.a
-              whileHover={{ x: 5 }}
-              href="#"
-              className="flex items-center px-5 py-3 text-gray-700 hover:bg-gray-100 transition-colors"
-            >
-              <FaImage className="mr-4 text-gray-500" />
-              <span>Text to Image</span>
-            </motion.a>
+            <Link to="/user/text-to-image">
+              <motion.div
+                whileHover={{ x: 5 }}
+                className="flex items-center px-5 py-3 text-gray-700 hover:bg-gray-100 transition-colors"
+              >
+                <FaImage className="mr-4 text-gray-500" />
+                <span>Text to Image</span>
+              </motion.div>
+            </Link>
+            <Link to="/user/prompt-to-edit">
+              <motion.div
+                whileHover={{ x: 5 }}
+                className="flex items-center px-5 py-3 text-gray-700 hover:bg-gray-100 transition-colors"
+              >
+                <FaEdit className="mr-4 text-gray-500" />
+                <span>Prompt to Edit</span>
+              </motion.div>
+            </Link>
             <div className="border-t border-gray-200 mt-1 pt-1">
               <motion.a
                 whileHover={{ x: 5 }}
