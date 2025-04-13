@@ -12,11 +12,11 @@ const Home = () => {
   const [showOptions, setShowOptions] = useState(false);
   const [showFolderPrompt, setShowFolderPrompt] = useState(false);
   const [folderName, setFolderName] = useState("");
-  
-  
-  
-  
-  
+
+
+
+
+
 
   // State for Images & Folders
   const [images, setimages] = useState([]);
@@ -114,22 +114,9 @@ const Home = () => {
           <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-4">
             {folders.map((folder) => (
               <Link key={folder.id} to={`/user/home/${folder.id}`}>
-                {/* <motion.div
-                  whileHover={{ y: -5 }}
-                  whileTap={{ scale: 0.98 }}
-                  className="flex flex-col items-center p-4 bg-white rounded-xl shadow-sm hover:shadow-md border border-gray-200 hover:border-purple-300 transition-all cursor-pointer h-full"
-                >
-                  <div className="relative w-16 h-16 flex items-center justify-center mb-3">
-                    <FaFolder className="text-4xl text-purple-500 absolute" />
-                    <FaFolder className="text-4xl text-purple-400 absolute opacity-70 -bottom-1 -right-1" />
-                  </div>
-                </motion.div> */}
                 <div className="">
                   <Folder name={folder.name} />
                 </div>
-                {/* <p className="text-sm font-medium text-gray-700 text-center truncate w-full">
-                  {folder.name}
-                </p> */}
               </Link>
             ))}
           </div>
@@ -166,7 +153,7 @@ const Home = () => {
         {images.length > 0 ? (
           <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-4">
             {images.map((image, index) => (
-              <ImageCard imageUrl={image} key={index} />
+              <ImageCard imageUrl={image} key={index} folderId={parent} setimages={setimages}/>
             ))}
           </div>
         ) : (

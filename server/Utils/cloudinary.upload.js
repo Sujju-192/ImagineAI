@@ -41,9 +41,10 @@ export const uploadToCloudinary = async (localPath) => {
 export const deleteFromCloudinary = async (publicID) => {
     try {
         const response = await cloudinary.uploader.destroy(publicID);
+        console.log(response);
         return response;
     } catch (error) {
         console.log(error);
-        return null;
+        return false;
     }
 }

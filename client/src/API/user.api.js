@@ -55,3 +55,13 @@ export const uploadImage=async(data)=>{
         return false
     }
 }
+
+export const deleteImage=async(data)=>{
+    try {
+        const res=await userApi.post("/deleteimage",data);
+        return true;
+    } catch (error) {
+        console.log(error);
+        return false;
+    }
+}

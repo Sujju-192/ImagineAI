@@ -1,7 +1,7 @@
 import { Router } from "express";
 import upload from '../multer.js'
-import { addUserToDataBase, getFirebaseUser, addFolderAtFirebase, getFolderDetailsFromFirebase, addImageAtFirebase } from "../Utils/firebase.database.js";
-import { uploadToCloudinary } from "../Utils/cloudinary.upload.js";
+import { addUserToDataBase, getFirebaseUser, addFolderAtFirebase, getFolderDetailsFromFirebase, addImageAtFirebase, deleteImageAtFirebase } from "../Utils/firebase.database.js";
+import { deleteFromCloudinary, uploadToCloudinary } from "../Utils/cloudinary.upload.js";
 
 const userRoute = Router()
 
@@ -50,6 +50,38 @@ userRoute.post("/addimage", upload.single("image"), async (req, res) => {
     }
     else return res.status(500).json({ message: "inter server error" })
 })
+
+userRoute.post("/deleteimage", async (req, res) => {
+    const { userId, imageURL, folderId } = req.body;
+
+    if (!userId || !imageURL || !folderId) {
+        return res.status(400).json({ message: "Invalid parameters" });
+    }
+
+    try {
+        const firebaseResult = await deleteImageAtFirebase({ userId, imageURL, folderId });
+        if (!firebaseResult) {
+            return res.status(400).json({ message: "Firebase fucked" });
+        }
+
+        const seperatedURL = imageURL.split('/');
+        const filenameWithExt = seperatedURL[seperatedURL.length - 1]; 
+        const finalURL = filenameWithExt.split('.')[0]; 
+        
+        const cloudinaryResponse = await deleteFromCloudinary(finalURL);
+        
+        if (!cloudinaryResponse) {
+            return res.status(400).json({ message: "Cloudinary fucked" });
+        }
+        
+
+        return res.status(200).json({ message: "Image deleted successfully" });
+    } catch (error) {
+        console.error(error);
+        return res.status(500).json({ message: "server hag diya" });
+    }
+});
+
 
 
 

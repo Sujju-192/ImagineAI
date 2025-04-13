@@ -184,9 +184,10 @@ const Landing = () => {
 
   return (
     <div className="min-h-screen bg-gradient-to-b from-black via-[#1a1a2e] to-[#2a2a40] text-white font-sans overflow-x-hidden">
-      <div className="fixed inset-0 z-0 opacity-60 pointer-events-none">
-        <spline-viewer url="https://prod.spline.design/TZKgDPemNJ7RI-bE/scene.splinecode" className="w-full h-full" loading="eager" />
+      <div className="fixed inset-0 z-0 opacity-100 pointer-events-none">
+        <spline-viewer url="https://prod.spline.design/YxHKNdQLj3AUz30n/scene.splinecode" className="w-full h-full" loading="eager" />
 
+        {/* https://prod.spline.design/TZKgDPemNJ7RI-bE/scene.splinecode */}
         
       </div>
 

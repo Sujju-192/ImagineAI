@@ -2,11 +2,14 @@ import React, { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { X, Edit2, Maximize2, Trash2 } from "lucide-react";
 import ImageEditor from "./ImageEditor";
+import { deleteImage } from "../API/user.api";
+import { useSelector } from 'react-redux';
 
-const ImageCard = ({ imageUrl }) => {
+const ImageCard = ({ imageUrl, folderId, setimages }) => {
   const [isFullScreen, setIsFullScreen] = useState(false);
   const [disableHover, setDisableHover] = useState(false);
   const [edit, setEdit] = useState(false);
+  const userId = useSelector(state => state.userId);
 
   const toggleFullScreen = () => {
     if (isFullScreen) {
@@ -20,8 +23,18 @@ const ImageCard = ({ imageUrl }) => {
   const closeEditor = () => setEdit(false);
 
   const handleDelete = () => {
-    // 💣 Add your delete logic here
-    console.log("Delete image:", imageUrl);
+    const data = {
+      userId: userId,
+      folderId: folderId,
+      imageURL: imageUrl
+    }
+    const response = deleteImage(data);
+    if (response) {
+      setimages(pre => pre.filter((img) => img !== imageUrl));
+      setIsFullScreen(false);
+    }
+
+    console.log(data);
   };
 
   return (
@@ -30,9 +43,8 @@ const ImageCard = ({ imageUrl }) => {
       <div className="relative w-full max-w-sm group">
         <div
           onClick={toggleFullScreen}
-          className={`relative overflow-hidden rounded-2xl bg-gradient-to-br from-gray-100 to-gray-200 shadow-lg transition-all duration-300 cursor-zoom-in${
-            !isFullScreen && !disableHover && "group-hover:shadow-xl"
-          }`}
+          className={`relative overflow-hidden rounded-2xl bg-gradient-to-br from-gray-100 to-gray-200 shadow-lg transition-all duration-300 cursor-zoom-in${!isFullScreen && !disableHover && "group-hover:shadow-xl"
+            }`}
         >
           <motion.img
             src={imageUrl}
