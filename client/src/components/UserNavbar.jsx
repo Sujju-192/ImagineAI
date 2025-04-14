@@ -106,7 +106,7 @@ const UserNavbar = () => {
                 className="flex items-center space-x-2 text-gray-600 hover:text-purple-600 transition-colors"
               >
                 <FaEdit size={18} />
-                <span className="font-medium">Prompt to Edit</span>
+                <span className="font-medium">AI Image Editor</span>
               </motion.div>
             </Link>
           </div>
