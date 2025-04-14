@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { motion, useAnimation } from 'framer-motion';
 import { useInView } from 'react-intersection-observer';
 import {
@@ -9,11 +9,14 @@ import {
 } from 'react-icons/fa';
 import Logo from './Logo';
 import { useNavigate } from 'react-router';
+import RotatingText from './RotatingText';
+import VariableProximity from './VariableProximity';
 
 const Landing = () => {
   const [email, setEmail] = useState('');
   const [audio, setAudio] = useState(null);
   const navigate = useNavigate();
+  const containerRef = useRef(null);
 
   useEffect(() => {
     if (typeof Audio !== 'undefined') {
@@ -195,13 +198,44 @@ const Landing = () => {
         <Logo />
       </div>
 
-      <div className="relative z-10 container mx-auto px-6 pt-32 pb-20">
+      <div ref={containerRef} className="relative z-10 container mx-auto px-6 pt-32 pb-20">
         <motion.section className="mb-32 text-center" ref={heroRef} initial="hidden" animate={heroControls} variants={{ hidden: { opacity: 0 }, visible: { opacity: 1, transition: { staggerChildren: 0.2, delayChildren: 0.3 } } }}>
-          <motion.h1 className="text-5xl md:text-7xl lg:text-8xl font-extrabold bg-gradient-to-r from-purple-500 to-violet-400 bg-clip-text text-transparent mb-6" variants={{ hidden: { y: 20, opacity: 0 }, visible: { y: 0, opacity: 1, transition: { duration: 0.5 } } }}>
-            ImagineAI
+          <motion.h1 className="text-5xl md:text-7xl lg:text-8xl font-extrabold leading-[1.1] bg-gradient-to-r from-purple-500 to-violet-400 bg-clip-text text-transparent mb-6"
+            variants={{
+              hidden: { y: 20, opacity: 0 },
+              visible: { y: 0, opacity: 1, transition: { duration: 0.5 } }
+            }}
+          >
+            <VariableProximity
+              label={'ImagineAI'}
+              className={'variable-proximity-demo'}
+              fromFontVariationSettings="'wght' 400, 'opsz' 9"
+              toFontVariationSettings="'wght' 1000, 'opsz' 40"
+              containerRef={containerRef}
+              radius={100}
+              falloff='linear'
+            />
+
           </motion.h1>
           <motion.p className="text-xl md:text-2xl text-purple-200 mb-10 max-w-2xl mx-auto leading-relaxed" variants={{ hidden: { y: 20, opacity: 0 }, visible: { y: 0, opacity: 1, transition: { duration: 0.5 } } }}>
-            Transform your images with AI-powered magic
+          <div className="flex items-center space-x-2 text-3xl font-bold justify-center gap-2">
+            {/* Fixed Word */}
+            <span className="text-white">Let’s</span>
+
+            {/* Rotating Word */}
+            <RotatingText
+              texts={['create', 'explore', 'imagine', 'edit', 'transform', 'build', 'remix', 'generate']}
+              mainClassName="px-2 sm:px-2 md:px-3 bg-cyan-300 text-black overflow-hidden py-0.5 sm:py-1 md:py-2 justify-center rounded-lg"
+              staggerFrom={"last"}
+              initial={{ y: "100%" }}
+              animate={{ y: 0 }}
+              exit={{ y: "-120%" }}
+              staggerDuration={0.025}
+              splitLevelClassName="overflow-hidden pb-0.5 sm:pb-1 md:pb-1"
+              transition={{ type: "spring", damping: 30, stiffness: 400 }}
+              rotationInterval={2000}
+            />
+          </div>
           </motion.p>
           <motion.div className="flex flex-col sm:flex-row justify-center gap-4" variants={{ hidden: {}, visible: {} }}>
             <motion.button whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }} className="px-8 py-3 bg-purple-600 hover:bg-purple-700 text-white rounded-lg font-medium shadow-lg flex items-center justify-center gap-2" onClick={handleSignup}>
