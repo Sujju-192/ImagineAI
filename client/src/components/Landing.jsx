@@ -68,6 +68,7 @@ const Landing = () => {
         { icon: <FaMobileAlt />, text: "Access your images across all devices" },
         { icon: <FaRegSave />, text: "Automatic backup of your original files" }
       ],
+      image: "https://media.istockphoto.com/id/1409475480/photo/document-management-system-automation-software-to-archiving-and-efficiently-manage-and.jpg?s=612x612&w=0&k=20&c=AN0BnxLG991HPty3sZwmhuhTlPnJSdV6i4_cxg3XR6c=",
       action: handleLogin
     },
     {
@@ -79,6 +80,7 @@ const Landing = () => {
         { icon: <FaPaintBrush />, text: "Adjust brightness, contrast, and saturation" },
         { icon: <FaRegSave />, text: "Create and save your custom filters" }
       ],
+      image: "https://plugins-media.makeupar.com/smb/blog/post/2021-05-12/7a694289-db81-41da-a0cd-21b2965a5270.jpg",
       action: handleLogin
     },
     {
@@ -90,6 +92,7 @@ const Landing = () => {
         { icon: <FaBrain />, text: "AI-powered background suggestions" },
         { icon: <FaMagic />, text: "Automatic lighting matching" }
       ],
+      image: "https://a.storyblok.com/f/160496/1472x981/9bf40ad4ff/bg-removal-slider-v2artboard-1-copy.png",
       action: handleLogin
     },
     {
@@ -101,6 +104,7 @@ const Landing = () => {
         { icon: <FaPhotoVideo />, text: "Color restoration for vintage photos" },
         { icon: <FaCrop />, text: "4x resolution enhancement" }
       ],
+      image: "https://bst.icons8.com/wp-content/uploads/2020/07/damagedphotorestoration-photo-restoration-services-color-correction.jpg",
       action: handleLogin
     },
     {
@@ -112,6 +116,7 @@ const Landing = () => {
         { icon: <FaPalette />, text: "Multiple art style options" },
         { icon: <FaVectorSquare />, text: "High-resolution 4K output" }
       ],
+      image: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcR0si6Qwx4yijUONLsd8ecfyQPWjS5kDQ9OgA&s",
       action: handleLogin
     }
   ];
@@ -147,12 +152,21 @@ const Landing = () => {
           variants={itemVariants}
           whileHover={{ scale: 1.02 }}
         >
-          <div className="relative h-72 md:h-96 w-full bg-gradient-to-br from-purple-900/50 to-black/50 rounded-lg overflow-hidden border border-purple-500/30 flex items-center justify-center">
-            <div className="text-center p-6 backdrop-blur-sm">
-              {feature.icon}
-              <p className="text-purple-200 mt-4 text-lg font-medium">{feature.title}</p>
+        <div className="relative h-72 md:h-96 w-full rounded-lg overflow-hidden border border-purple-500/30">
+          {/* Image with no transparency */}
+          <img 
+            src={feature.image} 
+            alt={feature.title}
+            className="w-full h-full object-cover object-center"
+          />
+          
+          {/* Overlay with controlled transparency */}
+          {/* <div className="absolute inset-0 flex items-center justify-center bg-gradient-to-br from-purple-900/20 to-black/20">
+            <div className="bg-black/70 px-4 py-2 rounded-lg backdrop-blur-sm">
+              <p className="text-purple-200 text-lg font-medium">{feature.title}</p>
             </div>
-          </div>
+          </div> */}
+        </div>
         </motion.div>
         <motion.div className={`space-y-6 ${isEven ? 'md:order-1' : 'md:order-2'}`} variants={itemVariants}>
           <h3 className="text-3xl font-bold text-purple-200 bg-gradient-to-r from-purple-500/80 to-purple-300/80 bg-clip-text text-transparent">{feature.title}</h3>
