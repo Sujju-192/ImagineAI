@@ -52,7 +52,7 @@ const Signup = () => {
       {/* Spline 3D Background */}
       <div className="fixed inset-0 z-0">
         <spline-viewer 
-          url="https://prod.spline.design/YxHKNdQLj3AUz30n/scene.splinecode"
+          url="https://prod.spline.design/TZKgDPemNJ7RI-bE/scene.splinecode"
           className="w-full h-full"
         ></spline-viewer>
       </div>
