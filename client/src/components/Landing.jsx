@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { motion, useAnimation } from 'framer-motion';
 import { useInView } from 'react-intersection-observer';
 import {
@@ -10,11 +10,14 @@ import {
 import Logo from './Logo';
 import { useNavigate } from 'react-router';
 import RotatingText from './RotatingText';
+import VariableProximity from './VariableProximity';
+import RotatingText from './RotatingText';
 
 const Landing = () => {
   const [email, setEmail] = useState('');
   const [audio, setAudio] = useState(null);
   const navigate = useNavigate();
+  const containerRef = useRef(null);
 
   useEffect(() => {
     if (typeof Audio !== 'undefined') {
@@ -66,6 +69,7 @@ const Landing = () => {
         { icon: <FaMobileAlt />, text: "Access your images across all devices" },
         { icon: <FaRegSave />, text: "Automatic backup of your original files" }
       ],
+      image: "https://media.istockphoto.com/id/1409475480/photo/document-management-system-automation-software-to-archiving-and-efficiently-manage-and.jpg?s=612x612&w=0&k=20&c=AN0BnxLG991HPty3sZwmhuhTlPnJSdV6i4_cxg3XR6c=",
       action: handleLogin
     },
     {
@@ -77,6 +81,7 @@ const Landing = () => {
         { icon: <FaPaintBrush />, text: "Adjust brightness, contrast, and saturation" },
         { icon: <FaRegSave />, text: "Create and save your custom filters" }
       ],
+      image: "https://plugins-media.makeupar.com/smb/blog/post/2021-05-12/7a694289-db81-41da-a0cd-21b2965a5270.jpg",
       action: handleLogin
     },
     {
@@ -88,6 +93,7 @@ const Landing = () => {
         { icon: <FaBrain />, text: "AI-powered background suggestions" },
         { icon: <FaMagic />, text: "Automatic lighting matching" }
       ],
+      image: "https://a.storyblok.com/f/160496/1472x981/9bf40ad4ff/bg-removal-slider-v2artboard-1-copy.png",
       action: handleLogin
     },
     {
@@ -99,6 +105,7 @@ const Landing = () => {
         { icon: <FaPhotoVideo />, text: "Color restoration for vintage photos" },
         { icon: <FaCrop />, text: "4x resolution enhancement" }
       ],
+      image: "https://bst.icons8.com/wp-content/uploads/2020/07/damagedphotorestoration-photo-restoration-services-color-correction.jpg",
       action: handleLogin
     },
     {
@@ -110,6 +117,7 @@ const Landing = () => {
         { icon: <FaPalette />, text: "Multiple art style options" },
         { icon: <FaVectorSquare />, text: "High-resolution 4K output" }
       ],
+      image: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcR0si6Qwx4yijUONLsd8ecfyQPWjS5kDQ9OgA&s",
       action: handleLogin
     }
   ];
@@ -145,12 +153,21 @@ const Landing = () => {
           variants={itemVariants}
           whileHover={{ scale: 1.02 }}
         >
-          <div className="relative h-72 md:h-96 w-full bg-gradient-to-br from-purple-900/50 to-black/50 rounded-lg overflow-hidden border border-purple-500/30 flex items-center justify-center">
-            <div className="text-center p-6 backdrop-blur-sm">
-              {feature.icon}
-              <p className="text-purple-200 mt-4 text-lg font-medium">{feature.title}</p>
+        <div className="relative h-72 md:h-96 w-full rounded-lg overflow-hidden border border-purple-500/30">
+          {/* Image with no transparency */}
+          <img 
+            src={feature.image} 
+            alt={feature.title}
+            className="w-full h-full object-cover object-center"
+          />
+          
+          {/* Overlay with controlled transparency */}
+          {/* <div className="absolute inset-0 flex items-center justify-center bg-gradient-to-br from-purple-900/20 to-black/20">
+            <div className="bg-black/70 px-4 py-2 rounded-lg backdrop-blur-sm">
+              <p className="text-purple-200 text-lg font-medium">{feature.title}</p>
             </div>
-          </div>
+          </div> */}
+        </div>
         </motion.div>
         <motion.div className={`space-y-6 ${isEven ? 'md:order-1' : 'md:order-2'}`} variants={itemVariants}>
           <h3 className="text-3xl font-bold text-purple-200 bg-gradient-to-r from-purple-500/80 to-purple-300/80 bg-clip-text text-transparent">{feature.title}</h3>
@@ -196,13 +213,44 @@ const Landing = () => {
         <Logo />
       </div>
 
-      <div className="relative z-10 container mx-auto px-6 pt-32 pb-20">
+      <div ref={containerRef} className="relative z-10 container mx-auto px-6 pt-32 pb-20">
         <motion.section className="mb-32 text-center" ref={heroRef} initial="hidden" animate={heroControls} variants={{ hidden: { opacity: 0 }, visible: { opacity: 1, transition: { staggerChildren: 0.2, delayChildren: 0.3 } } }}>
-          <motion.h1 className="text-5xl md:text-7xl lg:text-8xl font-extrabold bg-gradient-to-r from-purple-500 to-violet-400 bg-clip-text text-transparent mb-6" variants={{ hidden: { y: 20, opacity: 0 }, visible: { y: 0, opacity: 1, transition: { duration: 0.5 } } }}>
-            ImagineAI
+          <motion.h1 className="text-5xl md:text-7xl lg:text-8xl font-extrabold leading-[1.1] bg-gradient-to-r from-purple-500 to-violet-400 bg-clip-text text-transparent mb-6"
+            variants={{
+              hidden: { y: 20, opacity: 0 },
+              visible: { y: 0, opacity: 1, transition: { duration: 0.5 } }
+            }}
+          >
+            <VariableProximity
+              label={'ImagineAI'}
+              className={'variable-proximity-demo'}
+              fromFontVariationSettings="'wght' 400, 'opsz' 9"
+              toFontVariationSettings="'wght' 1000, 'opsz' 40"
+              containerRef={containerRef}
+              radius={100}
+              falloff='linear'
+            />
+
           </motion.h1>
           <motion.p className="text-xl md:text-2xl text-purple-200 mb-10 max-w-2xl mx-auto leading-relaxed" variants={{ hidden: { y: 20, opacity: 0 }, visible: { y: 0, opacity: 1, transition: { duration: 0.5 } } }}>
-            Transform your images with AI-powered magic
+          <div className="flex items-center space-x-2 text-3xl font-bold justify-center gap-2">
+            {/* Fixed Word */}
+            <span className="text-white">Let’s</span>
+
+            {/* Rotating Word */}
+            <RotatingText
+              texts={['create', 'explore', 'imagine', 'edit', 'transform', 'build', 'remix', 'generate']}
+              mainClassName="px-2 sm:px-2 md:px-3 bg-cyan-300 text-black overflow-hidden py-0.5 sm:py-1 md:py-2 justify-center rounded-lg"
+              staggerFrom={"last"}
+              initial={{ y: "100%" }}
+              animate={{ y: 0 }}
+              exit={{ y: "-120%" }}
+              staggerDuration={0.025}
+              splitLevelClassName="overflow-hidden pb-0.5 sm:pb-1 md:pb-1"
+              transition={{ type: "spring", damping: 30, stiffness: 400 }}
+              rotationInterval={2000}
+            />
+          </div>
           </motion.p>
           <motion.div className="flex flex-col sm:flex-row justify-center gap-4" variants={{ hidden: {}, visible: {} }}>
             <motion.button whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }} className="px-8 py-3 bg-purple-600 hover:bg-purple-700 text-white rounded-lg font-medium shadow-lg flex items-center justify-center gap-2" onClick={handleSignup}>

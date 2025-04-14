@@ -46,21 +46,21 @@ const UserNavbar = () => {
         <div className="flex items-center justify-between h-16">
           {/* Logo and Mobile User Info */}
           <div className="flex items-center space-x-3">
-            <img
+            {/* <img
               src="https://via.placeholder.com/40"
               alt="Logo"
               className="w-9 h-9 rounded-full border-2 border-purple-500"
-            />
+            /> */}
             <div className="md:hidden flex flex-col">
               <span className="text-sm font-bold text-gray-800">
-                <span className="text-purple-600">Imagin</span>AI
+                <span className="text-purple-600">Imagine</span>AI
               </span>
               <span className="text-xs text-gray-600 truncate max-w-[120px]">
                 {name}
               </span>
             </div>
             <span className="text-xl font-bold text-gray-800 hidden md:block">
-              <span className="text-purple-600">Imagin</span>AI
+              <span className="text-purple-600">Imagine</span>AI
             </span>
           </div>
 
@@ -106,7 +106,7 @@ const UserNavbar = () => {
                 className="flex items-center space-x-2 text-gray-600 hover:text-purple-600 transition-colors"
               >
                 <FaEdit size={18} />
-                <span className="font-medium">Prompt to Edit</span>
+                <span className="font-medium">AI Image Editor</span>
               </motion.div>
             </Link>
           </div>
