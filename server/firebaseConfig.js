@@ -1,18 +1,23 @@
 // Import the functions you need from the SDKs you need
-import { initializeApp } from "firebase/app";
+// import { initializeApp } from "firebase/app";
 // TODO: Add SDKs for Firebase products that you want to use
 // https://firebase.google.com/docs/web/setup#available-libraries
+import { initializeApp } from "firebase/app";
+import dotenv from "dotenv";
 
+dotenv.config();
 // Your web app's Firebase configuration
 const firebaseConfig = {
-  apiKey: "AIzaSyAPpH9Zz-h94Z4uiA1f3E7V_5Ce60ynWFo",
-  authDomain: "imagineai-ed91a.firebaseapp.com",
-  projectId: "imagineai-ed91a",
-  storageBucket: "imagineai-ed91a.firebasestorage.app",
-  messagingSenderId: "781282249488",
-  appId: "1:781282249488:web:9d959665312a849cfaf395"
+  apiKey: process.env.FIREBASE_API_KEY,
+  authDomain: process.env.FIREBASE_AUTH_DOMAIN,
+  projectId: process.env.FIREBASE_PROJECT_ID,
+  storageBucket: process.env.FIREBASE_STORAGE_BUCKET,
+  messagingSenderId: process.env.FIREBASE_MESSAGING_SENDER_ID,
+  appId: process.env.FIREBASE_APP_ID
 };
 
 // Initialize Firebase
 export const app = initializeApp(firebaseConfig);
+
+
 
